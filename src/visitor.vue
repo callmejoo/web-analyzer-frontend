@@ -91,8 +91,7 @@
     },
     watch: {
       selected: function (val, oldVal) {
-        this.curPage = 0
-        this.getData()
+        this.getNew()
       },
       whichTime: function (val, oldVal) {
         this.startTimeShow = val === '开始时间'
