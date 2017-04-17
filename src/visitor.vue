@@ -40,7 +40,7 @@
           <td>{{ item.ip }}</td>
           <td>{{ item['search_name'] }}</td>
           <td>{{ item.keyword }}</td>
-          <td><a :href="item['from_url']">{{ item['from_url'].slice(0, 30) }}</a></td>
+          <td><a :href="item['from_url']">{{ item['from_url'].slice(0, 31) }}</a></td>
           <td><a :href="item.url">{{ item.url.slice(0, 20) }}</a></td>
           <td>{{ item.date }}</td>
         </tr>
