@@ -76,7 +76,7 @@ export default {
   },
   beforeCreate: function () {
     bus.$emit('loading', true)
-    this.$http.get('http://127.0.0.1:3000/db?do=overall').then((res) => {
+    this.$http.get('/db?do=overall').then((res) => {
       bus.$emit('loading', false)
       this.data = res.body
       let d = this.data

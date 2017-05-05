@@ -55,7 +55,7 @@ export default {
         username: this.username,
         password: this.password
       }
-      this.$http.post('http://127.0.0.1:3000/login', data, {emulateJSON: true})
+      this.$http.post('/login', data, {emulateJSON: true})
         .then(res => {
           if (res.body === 'success') {
             this.$cookie.set('login', true, 1)

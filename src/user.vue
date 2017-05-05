@@ -4,7 +4,12 @@
     <div class="table">
       <form class="pure-form form">
         <input placeholder="ip地址，回车查询" maxlength="15" v-model="ip" @keyup.enter="getNew"/>
-        <input placeholder="用户名，回车查询" v-model="keyword" @keyup.enter="getNew"/>
+        <input placeholder="用户名，回车查询" v-model="username" @keyup.enter="getNew"/>
+        <select title="a" style="height: 40px" v-model="hasKeyword">
+          <option selected>全部</option>
+          <option>有关键字</option>
+          <option>无关键字</option>
+        </select>
         <select title="a" style="height: 40px" v-model="whichTime">
           <option>开始时间</option>
           <option>结束时间</option>
@@ -18,6 +23,7 @@
           <th>#</th>
           <th>ip地址</th>
           <th>用户名</th>
+          <th>关键字</th>
           <th>时间</th>
         </tr>
         </thead>
@@ -26,6 +32,7 @@
           <td>{{ item.id }}</td>
           <td>{{ item.ip }}</td>
           <td>{{ item.user }}</td>
+          <td>{{ item.keyword }}</td>
           <td>{{ item.date }}</td>
         </tr>
         </tbody>
@@ -48,13 +55,15 @@
             id: '',
             ip: '',
             user: '',
+            keyword: '',
             date: ''
           }
         ],
-        url: 'http://127.0.0.1:3000',
+        url: '',
         api: '/db?do=get&db=user',
         ip: '',
-        keyword: '',
+        hasKeyword: '全部',
+        username: '',
         selected: '全部',
         whichTime: '开始时间',
         startTimeShow: true,
@@ -72,11 +81,16 @@
     },
     watch: {
       selected: function (val, oldVal) {
-        this.curPage = 0
+        this.curStart = 0
         this.getData()
       },
       whichTime: function (val, oldVal) {
+        this.curStart = 0
         this.startTimeShow = val === '开始时间'
+      },
+      hasKeyword: function (val, oldVal) {
+        this.curStart = 0
+        this.getData()
       }
     },
     computed: {
@@ -94,8 +108,8 @@
         if (this.ip === '') return '&ip=' + ''
         else return '&ip=' + this.ip
       },
-      keywordApi: function () {
-        return '&user=' + this.keyword
+      usermameApi: function () {
+        return '&user=' + this.username
       },
       endTimeShow: function () {
         return !this.startTimeShow
@@ -113,15 +127,18 @@
         } else {
           return ''
         }
+      },
+      hasKeywordApi: function () {
+        if (this.hasKeyword === '有关键字') return '&hasKeyword=true'
+        if (this.hasKeyword === '无关键字') return '&hasKeyword=false'
+        else return ''
       }
     },
     methods: {
       getData: function () {
         bus.$emit('loading', true)
-        this.$http.get(this.url + this.api + this.curStartApi + this.pageSizeApi + this.selectedApi + this.ipApi + this.keywordApi + this.startTimeApi + this.endTimeApi)
+        this.$http.get(this.url + this.api + this.curStartApi + this.pageSizeApi + this.selectedApi + this.ipApi + this.usermameApi + this.startTimeApi + this.endTimeApi + this.hasKeywordApi)
           .then((res) => {
-            console.log(this.startTime)
-            console.log(this.endTime)
             this.curPageSize = res.body.length
             if (this.curPageSize === 0) {
               alert('没数据了')

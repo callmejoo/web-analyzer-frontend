@@ -70,11 +70,12 @@
             date: ''
           }
         ],
-        url: 'http://127.0.0.1:3000',
+        url: '',
         api: '/db?do=get&db=visitor',
         ip: '',
         keyword: '',
         selected: '全部',
+        isUser: '全部',
         whichTime: '开始时间',
         startTimeShow: true,
         startTime: '',
@@ -95,6 +96,9 @@
       },
       whichTime: function (val, oldVal) {
         this.startTimeShow = val === '开始时间'
+      },
+      isUser: function (val, oldVal) {
+        this.getNew()
       }
     },
     computed: {
@@ -131,6 +135,11 @@
         } else {
           return ''
         }
+      },
+      isUserApi: function () {
+        if (this.isUser === '全部') return '&isUser=all'
+        if (this.isUser === '已注册') return '&isUser=true'
+        if (this.isUser === '未注册') return '&isUser=false'
       }
     },
     methods: {
@@ -184,7 +193,7 @@
     min-height: 800px;
   }
   .pure-table{
-    min-width: 820px;
+    min-width: 960px;
   }
   .page{
     margin-top: 10px;
