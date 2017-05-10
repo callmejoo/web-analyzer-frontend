@@ -4,7 +4,8 @@
     <div class="table">
       <form class="pure-form form">
         <input placeholder="ip地址，回车查询" maxlength="15" v-model="ip" @keyup.enter="getNew"/>
-        <input placeholder="用户名，回车查询" v-model="username" @keyup.enter="getNew"/>
+        <input placeholder="用户名，回车查询" class='filter' v-model="username" @keyup.enter="getNew"/>
+        <input placeholder="关键词，回车查询" class='filter' v-model="keyword" @keyup.enter="getNew"/>
         <select title="a" style="height: 40px" v-model="hasKeyword">
           <option selected>全部</option>
           <option>有关键字</option>
@@ -63,6 +64,7 @@
         api: '/db?do=get&db=user',
         ip: '',
         hasKeyword: '全部',
+        keyword: '',
         username: '',
         selected: '全部',
         whichTime: '开始时间',
@@ -132,12 +134,15 @@
         if (this.hasKeyword === '有关键字') return '&hasKeyword=true'
         if (this.hasKeyword === '无关键字') return '&hasKeyword=false'
         else return ''
+      },
+      keywordApi: function () {
+        return '&keyword=' + this.keyword
       }
     },
     methods: {
       getData: function () {
         bus.$emit('loading', true)
-        this.$http.get(this.url + this.api + this.curStartApi + this.pageSizeApi + this.selectedApi + this.ipApi + this.usermameApi + this.startTimeApi + this.endTimeApi + this.hasKeywordApi)
+        this.$http.get(this.url + this.api + this.curStartApi + this.pageSizeApi + this.selectedApi + this.ipApi + this.usermameApi + this.startTimeApi + this.endTimeApi + this.hasKeywordApi + this.keywordApi)
           .then((res) => {
             this.curPageSize = res.body.length
             if (this.curPageSize === 0) {
@@ -181,6 +186,9 @@
 </script>
 
 <style scoped>
+  .filter{
+    width: 10em
+  }
   .table{
     min-height: 500px;
   }
